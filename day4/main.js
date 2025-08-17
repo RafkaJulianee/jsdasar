@@ -1,0 +1,1 @@
+let nama ="rafka Julian Pratama"
