@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aplikasi Absen Modern</title>
+  <style>
+    :root {
+      --bg-light: #f8fafc;
+      --bg-dark: #0f172a;
+      --text-light: #0f172a;
+      --text-dark: #f8fafc;
+      --card-light: #ffffff;
+      --card-dark: #1e293b;
+      --primary: #3b82f6;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: 0.3s ease;
+    }
+
+    body.dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: var(--card-light);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 20px var(--shadow);
+      transition: 0.3s ease;
+    }
+
+    body.dark .card {
+      background-color: var(--card-dark);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    .clock {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 2px solid #ccc;
+      margin-bottom: 12px;
+      font-size: 1rem;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background-color: var(--primary);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2563eb;
+    }
+
+    select, .dark-toggle {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      border: 2px solid #ccc;
+      font-size: 1rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    ul li {
+      background: #e2e8f0;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      transition: 0.3s ease;
+    }
+
+    body.dark ul li {
+      background: #334155;
+    }
+
+    .footer-btns {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+
+    .footer-btns button {
+      flex: 1;
+      margin: 0 5px;
+      background-color: #ef4444;
+    }
+
+    .footer-btns button:hover {
+      background-color: #dc2626;
+    }
+
+    .loading {
+      display: none;
+      margin: 10px auto;
+      text-align: center;
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    @media (max-width: 500px) {
+      .card {
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>📋 Aplikasi Absen</h1>
+      <div class="clock" id="clock">Jam: --:--:--</div>
+
+      <input type="text" id="nama" placeholder="Masukkan nama kamu" autofocus>
+
+      <div class="buttons">
+        <button onclick="absen('Masuk')">Absen Masuk</button>
+        <button onclick="absen('Keluar')">Absen Keluar</button>
+      </div>
+
+      <select id="filter" onchange="tampilkanRiwayat()">
+        <option value="Semua">Tampilkan Semua</option>
+        <option value="Masuk">Hanya Absen Masuk</option>
+        <option value="Keluar">Hanya Absen Keluar</option>
+      </select>
+
+      <div class="dark-toggle">
+        <button onclick="toggleDarkMode()">🌓 Ganti Tema</button>
+      </div>
+
+      <div class="loading" id="loading">⏳ Memproses...</div>
+
+      <ul id="riwayat"></ul>
+
+      <div class="footer-btns">
+        <button onclick="hapusRiwayat()">🗑 Hapus Semua</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clock').textContent = 'Jam: ' + now.toLocaleTimeString("id-ID");
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function absen(status) {
+      const nama = document.getElementById("nama").value.trim();
+      if (!nama) {
+        alert("Nama tidak boleh kosong!");
+        return;
+      }
+
+      showLoading();
+
+      setTimeout(() => {
+        const waktu = new Date().toLocaleString("id-ID");
+        const data = { nama, waktu, status };
+
+        let riwayat = JSON.parse(localStorage.getItem("riwayatAbsen")) || [];
+        riwayat.unshift(data);
+        localStorage.setItem("riwayatAbsen", JSON.stringify(riwayat));
+
+        tampilkanRiwayat();
+        hideLoading();
+        document.getElementById("nama").value = "";
+      }, 500);
+    }
+
+    function tampilkanRiwayat() {
+      const filter = document.getElementById("filter").value;
+      const riwayat = JSON.parse(localStorage.getItem("riwayatAbsen")) || [];
+      const list = document.getElementById("riwayat");
+      list.innerHTML = "";
+
+      riwayat
+        .filter(item => filter === "Semua" || item.status === filter)
+        .forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${item.nama} - ${item.status} pada ${item.waktu}`;
+          list.appendChild(li);
+        });
+    }
+
+    function hapusRiwayat() {
+      if (confirm("Yakin ingin hapus semua riwayat absen?")) {
+        localStorage.removeItem("riwayatAbsen");
+        tampilkanRiwayat();
+      }
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+    }
+
+    function showLoading() {
+      document.getElementById("loading").classList.add("show");
+    }
+
+    function hideLoading() {
+      document.getElementById("loading").classList.remove("show");
+    }
+
+    window.onload = () => {
+      tampilkanRiwayat();
+      document.getElementById("nama").focus();
+    };
+  </script>
+</body>
+</html>

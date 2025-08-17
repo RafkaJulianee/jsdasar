@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="buton1" onclick="gantiwarna()">Login</button>
+    <button class="buton2" onclick="gantiwarna2()">buatakun</button>
+
+    <script>
+        const buton1 =document.getElementById('buton1')
+        const buton2 =document.querySelector('.buton2')
+        buton1.style.border='none' //untuk nge style si sintax
+        buton1.style.padding='10px'
+        buton1.style.fontSize='20px'
+        buton1.style.backgroundColor='pink'
+        buton2.style.border='none'
+        buton2.style.padding='10px'
+        buton2.style.fontSize='20px'
+        buton2.style.backgroundColor='pink'
+        function gantiwarna(){
+            buton1.style.background='yellow'//fungsi untuk mengganti warna button setelah di klick
+        }
+
+        function gantiwarna2(){
+            buton2.style.background='blue' 
+        }
+
+        
+        
+    </script>
+</body>
+</html>

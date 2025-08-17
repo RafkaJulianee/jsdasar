@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Catatan Harian</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+
+    textarea {
+      width: 300px;
+      height: 150px;
+      font-size: 16px;
+      padding: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>Catatan Harian 📝</h2>
+  <textarea id="catatan" placeholder="Tulis sesuatu..."></textarea><br>
+  <button onclick="simpanCatatan()">Simpan</button>
+
+  <script>
+    // Tampilkan isi lama kalau ada
+    if (localStorage.getItem("catatan")) {
+      document.getElementById("catatan").value = localStorage.getItem("catatan");
+    }
+
+    // Simpan isi baru
+    function simpanCatatan() {
+      let isi = document.getElementById("catatan").value;
+      localStorage.setItem("catatan", isi);
+      alert("Catatan berhasil disimpan!");
+    }
+  </script>
+</body>
+</html>
