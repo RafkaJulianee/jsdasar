@@ -19,6 +19,30 @@
 
         }
         //luas segi panjang
+        function luassegipanjang(panjang,lebar){
+            return panjang*lebar;
+
+        }
+        //luas jajar genjang
+        function luasjajargenjang(alas,tinggi){
+            return alas*tinggi;
+
+        }
+        //2. Menghitung Total Gaji Karyawan
+        function hitungaji(nama,gajiperhari,jumlahhari){
+            let total = gajiperhari * jumlahhari;
+            return `Nama:${nama},Total Gaji:${total}`;
+
+        }
+        //pemanggilan fungsi
+        //tugas 1 console.log("Luas Lingkaran (r=7):", luasLingkaran(7));
+console.log("Luas Segitiga (alas=10, tinggi=5):", luassegitiga(10, 5));
+console.log("Luas Persegi Panjang (10x7):", luassegipanjang(10, 7));
+console.log("Luas Jajar Genjang (alas=12, tinggi=6):", luasjajargenjang(12, 6));
+//gaji
+console.log(hitungaji("Budi", 100000, 22));
+console.log(hitungaji("Siti", 120000, 26));
+    
     </script>
     
 </body>
