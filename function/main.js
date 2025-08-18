@@ -1,11 +1,7 @@
-
-function username(nama){
-    return "Username: " + nama;
-}
-alert(username("Benjamin Sesko"));
-function name(firstname,lastname){
-    console.log("First Name: " + firstname);
-    console.log("Last Name: " + lastname);
+function addname(){
+    for(var i = 0; i < 5; i++){
+        console.log("Name " + (i+1) + ": " + prompt("Enter name: "));
+    }
 }
 
-alert(username("BenjaminSesko"))
+addname('julianzhao');
