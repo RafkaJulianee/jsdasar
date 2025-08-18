@@ -6,8 +6,14 @@ const nama = (x,y)=>{
 nama(3,3)
  //membuat angka random
 function random (){
-    console.log(~~(Math.random()*1000))
+    const randomnum=  (~~(Math.random()*1000))  
+if (randomnum >250){
+    console.log('Kerenn Lebih Dari 250')
+      
+}else{
+    console.log(randomnum)
 }
+} 
 random()
 
 
